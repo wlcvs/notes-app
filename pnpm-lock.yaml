@@ -14,9 +14,6 @@ importers:
       '@milkdown/react':
         specifier: ^7.21.3
         version: 7.21.3(@codemirror/language@6.12.4)(@codemirror/state@6.7.1)(@codemirror/view@6.43.6)(prosemirror-model@1.25.11)(prosemirror-state@1.4.4)(prosemirror-view@1.42.1)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)(typescript@5.9.3)
-      '@milkdown/theme-nord':
-        specifier: ^7.21.3
-        version: 7.21.3
       '@prisma/adapter-pg':
         specifier: ^7.8.0
         version: 7.8.0
@@ -807,9 +804,6 @@ packages:
     peerDependencies:
       react: '*'
       react-dom: '*'
-
-  '@milkdown/theme-nord@7.21.3':
-    resolution: {integrity: sha512-MJeVRvuY9IFdrbcRK1irIRjYHeM/yn1rpug3aYZSvDk0Aeju8DBEqbrJ/d1I6m4802vcpF7Y+aAqJtJWloqcqw==}
 
   '@milkdown/transformer@7.21.3':
     resolution: {integrity: sha512-0OmceNYpmLwZYZLLwI+ABtVh3GdbRGBGVsfgCprqp0f6L+Y+qZcnAEDPExPqIXDEBuuyaz57UHxBmaskN7CRNg==}
@@ -4587,15 +4581,6 @@ snapshots:
       - prosemirror-view
       - supports-color
       - typescript
-
-  '@milkdown/theme-nord@7.21.3':
-    dependencies:
-      '@milkdown/core': 7.21.3
-      '@milkdown/ctx': 7.21.3
-      '@milkdown/prose': 7.21.3
-      clsx: 2.1.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@milkdown/transformer@7.21.3':
     dependencies:

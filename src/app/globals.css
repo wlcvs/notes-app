@@ -88,3 +88,81 @@ body {
   font-size: 0.6875rem;
   color: var(--muted);
 }
+
+/*
+ * Milkdown (ProseMirror) surface, themed to the monochrome HUD. Accents are
+ * kept small (links use cyan); everything else stays foreground/muted.
+ */
+.milkdown-shell .ProseMirror {
+  outline: none;
+  min-height: 3rem;
+  color: var(--foreground);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+.milkdown-shell .ProseMirror[contenteditable="true"] {
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  padding: 0.5rem 0.75rem;
+}
+.milkdown-shell .ProseMirror p {
+  margin: 0.25rem 0;
+}
+.milkdown-shell .ProseMirror h1,
+.milkdown-shell .ProseMirror h2,
+.milkdown-shell .ProseMirror h3,
+.milkdown-shell .ProseMirror h4 {
+  font-weight: 600;
+  margin: 0.6rem 0 0.3rem;
+  line-height: 1.3;
+}
+.milkdown-shell .ProseMirror h1 {
+  font-size: 1.15rem;
+}
+.milkdown-shell .ProseMirror h2 {
+  font-size: 1.05rem;
+}
+.milkdown-shell .ProseMirror code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  background: var(--surface-raised);
+  padding: 0.1em 0.3em;
+  border-radius: 2px;
+  font-size: 0.85em;
+}
+.milkdown-shell .ProseMirror pre {
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  border-radius: 2px;
+  overflow-x: auto;
+}
+.milkdown-shell .ProseMirror pre code {
+  background: transparent;
+  padding: 0;
+}
+.milkdown-shell .ProseMirror ul,
+.milkdown-shell .ProseMirror ol {
+  padding-left: 1.25rem;
+  margin: 0.25rem 0;
+}
+.milkdown-shell .ProseMirror ul {
+  list-style: square;
+}
+.milkdown-shell .ProseMirror ol {
+  list-style: decimal;
+}
+.milkdown-shell .ProseMirror a {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+}
+.milkdown-shell .ProseMirror blockquote {
+  border-left: 2px solid var(--border-strong);
+  padding-left: 0.75rem;
+  margin: 0.4rem 0;
+  color: var(--muted-strong);
+}
+.milkdown-shell .ProseMirror hr {
+  border: none;
+  border-top: 1px solid var(--border-strong);
+  margin: 0.75rem 0;
+}
