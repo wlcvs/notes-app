@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+/*
+ * HUD base palette — minimalist military / sci-fi.
+ * Black / white / gray carry the design; it must read as monochrome at a glance.
+ * Accent tokens are defined here but must be used sparingly, only for state and
+ * small highlights (never as large fills).
+ */
+:root {
+  /* Monochrome base (dark-first) */
+  --background: #0a0a0b;
+  --surface: #131316;
+  --surface-raised: #1a1a1e;
+  --border: #2a2a30;
+  --border-strong: #3a3a42;
+  --foreground: #e8e8ea;
+  --muted: #8a8a92;
+  --muted-strong: #b4b4bc;
+
+  /* Accents — state + small highlights only */
+  --accent-red: #d64545; /* destructive / error */
+  --accent-amber: #d6a13a; /* warning / pending */
+  --accent-orange: #d67a3a;
+  --accent-green: #6f8f5a; /* muted military green — success */
+  --accent-purple: #8a6fb0;
+  --accent-brown: #9a7b5a;
+  --accent-blue: #4a7fb5;
+  --accent-cyan: #34d0d0; /* Watch Dogs cyan — primary interactive accent */
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #f4f4f5;
+    --surface: #ffffff;
+    --surface-raised: #fafafa;
+    --border: #d4d4d8;
+    --border-strong: #b8b8be;
+    --foreground: #18181b;
+    --muted: #6b6b72;
+    --muted-strong: #3f3f46;
+
+    --accent-red: #c23636;
+    --accent-amber: #b5842a;
+    --accent-orange: #c26630;
+    --accent-green: #5a7748;
+    --accent-purple: #6f5595;
+    --accent-brown: #7d6244;
+    --accent-blue: #3a6699;
+    --accent-cyan: #1fa8a8;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
+
+  --color-accent-red: var(--accent-red);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-orange: var(--accent-orange);
+  --color-accent-green: var(--accent-green);
+  --color-accent-purple: var(--accent-purple);
+  --color-accent-brown: var(--accent-brown);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-cyan: var(--accent-cyan);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* HUD convention: uppercase monospace labels with tracking. */
+.hud-label {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.6875rem;
+  color: var(--muted);
+}

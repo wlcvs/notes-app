@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// The note is the central, list-visible entity. "Video note" is one NoteType;
+// STANDALONE / WEB / DOC slot in later without redesign. Two dimensions are
+// generic by design, each with a 1:1 per-type extension: the note's *source*
+// and each entry's *anchor*.
+
+enum NoteType {
+  VIDEO
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  type      NoteType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  video   VideoNote? // the SOURCE, when type=VIDEO
+  entries Entry[] //    the annotations (generic)
+}
+
+// Source extension: links the note to a video. One note per video.
+model VideoNote {
+  noteId  String @id
+  videoId String @unique
+  note    Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  video   Video  @relation(fields: [videoId], references: [id])
+}
+
+// A generic annotation inside a note. `body` (markdown) is common to every type.
+model Entry {
+  id        String   @id @default(cuid())
+  noteId    String
+  body      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  note      Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+
+  video VideoEntry? // video-type anchor (1:1); future: DocEntry? WebEntry?
+
+  @@index([noteId])
+}
+
+// Anchor extension for the video type = a timestamp in seconds.
+model VideoEntry {
+  entryId String @id
+  t       Int
+  entry   Entry  @relation(fields: [entryId], references: [id], onDelete: Cascade)
+
+  @@index([t])
+}
+
+model Video {
+  id        String   @id // raw YouTube video id — natural key
+  title     String
+  channel   String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  videoNote VideoNote?
+}
