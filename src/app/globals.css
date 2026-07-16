@@ -147,6 +147,14 @@ body {
   font-size: 0.6875rem;
 }
 
+/* Square HUD range thumbs (seek + volume) instead of Plyr's default circle. */
+.plyr-hud input[type="range"]::-webkit-slider-thumb {
+  border-radius: 0 !important;
+}
+.plyr-hud input[type="range"]::-moz-range-thumb {
+  border-radius: 0 !important;
+}
+
 /*
  * Timeline markers overlayed by React portals. Plyr ships `.plyr button {
  * width: auto }` (plyr.css), whose specificity (0,1,1) beats the Tailwind
