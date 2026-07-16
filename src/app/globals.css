@@ -26,6 +26,24 @@
   --accent-brown: #9a7b5a;
   --accent-blue: #4a7fb5;
   --accent-cyan: #34d0d0; /* Watch Dogs cyan — primary interactive accent */
+
+  /* Plyr HUD overrides — cyan + monochrome */
+  --plyr-color-main: var(--accent-cyan);
+  --plyr-video-controls-background: linear-gradient(
+    rgba(0, 0, 0, 0),
+    rgba(10, 10, 11, 0.85)
+  );
+  --plyr-video-control-color: var(--foreground);
+  --plyr-video-control-color-hover: var(--background);
+  --plyr-video-control-background-hover: var(--accent-cyan);
+  --plyr-range-fill-background: var(--accent-cyan);
+  --plyr-range-track-background: var(--border-strong);
+  --plyr-tooltip-background: var(--surface-raised);
+  --plyr-tooltip-color: var(--foreground);
+  --plyr-font-family: var(--font-geist-mono), ui-monospace, monospace;
+  --plyr-font-size-small: 0.6875rem;
+  --plyr-font-size-large: 0.8rem;
+  --plyr-font-size-time: 0.75rem;
 }
 
 @media (prefers-color-scheme: light) {
@@ -47,6 +65,15 @@
     --accent-brown: #7d6244;
     --accent-blue: #3a6699;
     --accent-cyan: #1fa8a8;
+
+    --plyr-video-controls-background: linear-gradient(
+      rgba(255, 255, 255, 0),
+      rgba(240, 240, 245, 0.9)
+    );
+    --plyr-video-control-color: var(--foreground);
+    --plyr-video-control-color-hover: var(--background);
+    --plyr-tooltip-background: var(--surface-raised);
+    --plyr-tooltip-color: var(--foreground);
   }
 }
 
@@ -90,79 +117,120 @@ body {
 }
 
 /*
- * Milkdown (ProseMirror) surface, themed to the monochrome HUD. Accents are
- * kept small (links use cyan); everything else stays foreground/muted.
+ * Plyr HUD tweaks. The player sits inside our border; keep the play button
+ * subtle and controls compact so the cyan accent pops only on hover / marker.
  */
-.milkdown-shell .ProseMirror {
-  outline: none;
-  min-height: 3rem;
-  color: var(--foreground);
-  font-size: 0.9rem;
-  line-height: 1.55;
-}
-.milkdown-shell .ProseMirror[contenteditable="true"] {
-  border: 1px solid var(--border-strong);
-  background: var(--surface);
-  padding: 0.5rem 0.75rem;
-}
-.milkdown-shell .ProseMirror p {
-  margin: 0.25rem 0;
-}
-.milkdown-shell .ProseMirror h1,
-.milkdown-shell .ProseMirror h2,
-.milkdown-shell .ProseMirror h3,
-.milkdown-shell .ProseMirror h4 {
-  font-weight: 600;
-  margin: 0.6rem 0 0.3rem;
-  line-height: 1.3;
-}
-.milkdown-shell .ProseMirror h1 {
-  font-size: 1.15rem;
-}
-.milkdown-shell .ProseMirror h2 {
-  font-size: 1.05rem;
-}
-.milkdown-shell .ProseMirror code {
+.plyr-hud .plyr {
+  border-radius: 0;
   font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+.plyr-hud .plyr__control {
+  color: var(--foreground);
+}
+.plyr-hud .plyr__control--overlaid {
+  background: var(--accent-cyan);
+  color: var(--background);
+}
+.plyr-hud .plyr__progress {
+  position: relative;
+}
+.plyr-hud .plyr__progress__buffer,
+.plyr-hud .plyr__progress input[type="range"] {
+  cursor: pointer;
+}
+.plyr-hud .plyr__tooltip {
   background: var(--surface-raised);
-  padding: 0.1em 0.3em;
-  border-radius: 2px;
-  font-size: 0.85em;
+  color: var(--foreground);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.6875rem;
 }
-.milkdown-shell .ProseMirror pre {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.75rem;
-  border-radius: 2px;
-  overflow-x: auto;
+
+/*
+ * Timeline markers overlayed by React portals. Plyr ships `.plyr button {
+ * width: auto }` (plyr.css), whose specificity (0,1,1) beats the Tailwind
+ * utility class `.w-1.5` (0,1,0) that's supposed to size these — the marker
+ * button was rendering with a real DOM node but zero width (invisible,
+ * though present and correctly positioned). Force the size explicitly.
+ */
+.plyr-timeline-marker {
+  z-index: 3;
+  width: 0.375rem !important;
+  height: 100% !important;
 }
-.milkdown-shell .ProseMirror pre code {
-  background: transparent;
-  padding: 0;
+
+/*
+ * Atomic Editor shell — matches the HUD. The editor fills its parent height,
+ * so the container controls the visible bounds.
+ *
+ * @atomic-editor/editor's built-in theme themes itself through
+ * `--atomic-editor-*` CSS custom properties (documented in the package's own
+ * atomic-theme.js header: "consumers override by setting the prefixed vars
+ * at any ancestor of the editor"). Setting them here maps the package's
+ * look to our HUD tokens without fighting CodeMirror's StyleModule mount
+ * order (which otherwise makes the package's built-in theme win over our own
+ * EditorView.theme() in note-editor.tsx for every shared property, including
+ * font-size/family — not just padding).
+ */
+.atomic-shell {
+  --atomic-editor-fg: var(--foreground);
+  --atomic-editor-fg-muted: var(--muted);
+  --atomic-editor-fg-faint: var(--muted);
+  --atomic-editor-bg: var(--surface);
+  --atomic-editor-bg-surface: var(--surface-raised);
+  --atomic-editor-bg-panel: var(--surface-raised);
+  --atomic-editor-border: var(--border-strong);
+  --atomic-editor-font: var(--font-geist-mono), ui-monospace, monospace;
+  --atomic-editor-font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --atomic-editor-body-size: 0.9rem;
+  --atomic-editor-body-leading: 1.55;
+  --atomic-editor-accent-bright: var(--accent-cyan);
+  --atomic-editor-selection-bg: color-mix(
+    in srgb,
+    var(--accent-cyan) 28%,
+    transparent
+  );
 }
-.milkdown-shell .ProseMirror ul,
-.milkdown-shell .ProseMirror ol {
-  padding-left: 1.25rem;
-  margin: 0.25rem 0;
+.atomic-shell .cm-editor {
+  height: 100%;
 }
-.milkdown-shell .ProseMirror ul {
-  list-style: square;
+
+/*
+ * The one theme property the package doesn't expose as a CSS var:
+ * `.cm-content { padding-bottom: 40vh }` (scroll headroom for active
+ * editing), hardcoded and always wins the cascade regardless of the vars
+ * above. Force it to something proportionate to this app's compact rows —
+ * a little breathing room while editing, none while reading.
+ */
+.atomic-shell--readonly .cm-content {
+  padding: 0.25rem 0.75rem !important;
+  min-height: 0 !important;
 }
-.milkdown-shell .ProseMirror ol {
-  list-style: decimal;
+.atomic-shell--readonly .cm-editor,
+.atomic-shell--readonly .cm-scroller {
+  height: auto !important;
 }
-.milkdown-shell .ProseMirror a {
-  color: var(--accent-cyan);
-  text-decoration: underline;
+.atomic-shell:not(.atomic-shell--readonly) .cm-content {
+  padding: 0.5rem 0.75rem 1rem !important;
+  min-height: 3rem !important;
 }
-.milkdown-shell .ProseMirror blockquote {
-  border-left: 2px solid var(--border-strong);
-  padding-left: 0.75rem;
-  margin: 0.4rem 0;
-  color: var(--muted-strong);
+.atomic-shell:not(.atomic-shell--readonly) .cm-editor,
+.atomic-shell:not(.atomic-shell--readonly) .cm-scroller {
+  height: auto !important;
 }
-.milkdown-shell .ProseMirror hr {
-  border: none;
-  border-top: 1px solid var(--border-strong);
-  margin: 0.75rem 0;
+/*
+ * Same mount-order problem can leave other hardcoded package layout rules
+ * (not just padding-bottom) winning over expectations — belt-and-suspenders
+ * reset for gutter width and per-line indent, which aren't CSS vars either.
+ */
+.atomic-shell .cm-content {
+  min-width: 0 !important;
+}
+.atomic-shell .cm-line {
+  padding: 0 !important;
+  text-indent: 0 !important;
+}
+.atomic-shell .cm-gutters {
+  display: none !important;
 }

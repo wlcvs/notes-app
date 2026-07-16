@@ -355,7 +355,7 @@ function NoteList({
 
   if (ordered.length === 0) {
     return (
-      <p className="border border-dashed border-border p-10 text-center text-sm text-muted">
+      <p data-testid="note-list-empty" className="border border-dashed border-border p-10 text-center text-sm text-muted">
         No notes yet. Capture one from a YouTube timeline with the extension.
       </p>
     );
@@ -371,6 +371,8 @@ function NoteList({
           <li key={note.id}>
             <button
               type="button"
+              data-testid="note-list-item"
+              data-note-id={note.id}
               onClick={() => onOpen(note.id)}
               className="flex w-full flex-col gap-1 border border-border bg-surface px-4 py-3 text-left transition-colors hover:border-accent-cyan hover:bg-surface-raised"
             >
@@ -433,6 +435,7 @@ function NoteView({
         </div>
         <button
           type="button"
+          data-testid="back-button"
           onClick={onBack}
           className="hud-label shrink-0 border border-border-strong px-3 py-1 text-muted-strong hover:text-foreground"
         >
