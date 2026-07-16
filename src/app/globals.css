@@ -226,6 +226,19 @@ body {
  */
 .atomic-shell .cm-content {
   min-width: 0 !important;
+  /*
+   * CodeMirror's base theme centers .cm-content with `margin: 0 auto` and
+   * caps its max-width to its (short) intrinsic content size instead of
+   * filling the flex row — on a one-line entry this reads as the text
+   * floating in the middle of the box, far from the left edge. Force it to
+   * take the full row instead.
+   */
+  max-width: none !important;
+  width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  flex-grow: 1 !important;
+  flex-basis: 0 !important;
 }
 .atomic-shell .cm-line {
   padding: 0 !important;
